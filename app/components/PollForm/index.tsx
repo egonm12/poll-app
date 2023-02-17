@@ -321,14 +321,13 @@ const PollForm: FC<Props> = ({ poll }) => {
 					</select>
 
 					<select name="category" defaultValue={poll?.category}>
-						<option value="html">HTML</option>
-						<option value="css">CSS</option>
-						<option value="javascript">JavaScript</option>
-						<option value="typescript">TypeScript</option>
-						<option value="general-frontend">
-							General frontend
+						<option value="flutter">Flutter</option>
+						<option value="ios">iOS</option>
+						<option value="android">Android</option>
+						<option value="dart">Dart</option>
+						<option value="general-mobile">
+							General mobile
 						</option>
-						<option value="react">React</option>
 					</select>
 				</aside>
 			</Form>

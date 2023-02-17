@@ -34,7 +34,7 @@ const getWinner = (users: any, field: "seasonStreak" | "total" | "correct") => {
 };
 
 const UserStatistics: FC<Props> = ({ users, voted, teams }) => {
-	const [active, setActive] = useState<Statistics>("season");
+	const [active, setActive] = useState<Statistics>("all-time");
 
 	return (
 		<section className="poll-statistics-container">
@@ -50,14 +50,6 @@ const UserStatistics: FC<Props> = ({ users, voted, teams }) => {
 				</button>
 				<button
 					className={classnames("filter-button", {
-						active: active === "season",
-					})}
-					onClick={() => setActive("season")}
-				>
-					Highest total this season
-				</button>
-				<button
-					className={classnames("filter-button", {
 						active: active === "correct",
 					})}
 					onClick={() => setActive("correct")}
@@ -69,7 +61,7 @@ const UserStatistics: FC<Props> = ({ users, voted, teams }) => {
 				{active === "all-time" && (
 					<>
 						{users
-							.filter((user) => user.polls.total > 7)
+							// .filter((user) => user.polls.total > 7)
 							.sort((a, b) => b.polls.total - a.polls.total)
 							.map((user) => (
 								<article
@@ -91,7 +83,7 @@ const UserStatistics: FC<Props> = ({ users, voted, teams }) => {
 				{active === "correct" && (
 					<>
 						{users
-							.filter((user) => user.polls.total > 7)
+							// .filter((user) => user.polls.total)
 							.sort((a, b) => b.polls.correct - a.polls.correct)
 							.map((user) => (
 								<article
@@ -111,120 +103,120 @@ const UserStatistics: FC<Props> = ({ users, voted, teams }) => {
 							))}
 					</>
 				)}
-				{active === "season" && (
-					<section className="team-season-container">
-						<h1 className="team-season-title">Teams leaderboard</h1>
-						<ol className="team-list">
-							{teams
-								.sort((a, b) => b.points.total - a.points.total)
-								.map((team, idx) => {
-									const votedUserIds = voted.map(
-										(vote: Voted) => vote.userId
-									);
+				{/*{active === "season" && (*/}
+				{/*	<section className="team-season-container">*/}
+				{/*		<h1 className="team-season-title">Teams leaderboard</h1>*/}
+				{/*		<ol className="team-list">*/}
+				{/*			{teams*/}
+				{/*				.sort((a, b) => b.points.total - a.points.total)*/}
+				{/*				.map((team, idx) => {*/}
+				{/*					const votedUserIds = voted.map(*/}
+				{/*						(vote: Voted) => vote.userId*/}
+				{/*					);*/}
 
-									const votedUserIdsByTeam =
-										votedUserIds.filter((id: string) =>
-											team.users.find(
-												(tuid) => tuid === id
-											)
-										);
+				{/*					const votedUserIdsByTeam =*/}
+				{/*						votedUserIds.filter((id: string) =>*/}
+				{/*							team.users.find(*/}
+				{/*								(tuid) => tuid === id*/}
+				{/*							)*/}
+				{/*						);*/}
 
-									return (
-										<>
-											<li
-												className={classnames(
-													"team-container",
-													team.name.toLowerCase()
-												)}
-											>
-												<section className="team-list-item skew-item">
-													<div className="team-name">
-														<span className="team-place">
-															{idx + 1}
-														</span>
-														<span className="team-text">
-															Team
-														</span>
-														<h3>{team.name}</h3>
-													</div>
-													<ul className="team-list-photos">
-														{users
-															.filter((user) =>
-																team.users.find(
-																	(uid) =>
-																		uid ===
-																		user.id
-																)
-															)
-															.map((user) => {
-																const userHasVoted =
-																	voted.find(
-																		(
-																			vote: Voted
-																		) =>
-																			vote.userId ===
-																			user.id
-																	);
+				{/*					return (*/}
+				{/*						<>*/}
+				{/*							<li*/}
+				{/*								className={classnames(*/}
+				{/*									"team-container",*/}
+				{/*									team.name.toLowerCase()*/}
+				{/*								)}*/}
+				{/*							>*/}
+				{/*								<section className="team-list-item skew-item">*/}
+				{/*									<div className="team-name">*/}
+				{/*										<span className="team-place">*/}
+				{/*											{idx + 1}*/}
+				{/*										</span>*/}
+				{/*										<span className="team-text">*/}
+				{/*											Team*/}
+				{/*										</span>*/}
+				{/*										<h3>{team.name}</h3>*/}
+				{/*									</div>*/}
+				{/*									<ul className="team-list-photos">*/}
+				{/*										{users*/}
+				{/*											.filter((user) =>*/}
+				{/*												team.users.find(*/}
+				{/*													(uid) =>*/}
+				{/*														uid ===*/}
+				{/*														user.id*/}
+				{/*												)*/}
+				{/*											)*/}
+				{/*											.map((user) => {*/}
+				{/*												const userHasVoted =*/}
+				{/*													voted.find(*/}
+				{/*														(*/}
+				{/*															vote: Voted*/}
+				{/*														) =>*/}
+				{/*															vote.userId ===*/}
+				{/*															user.id*/}
+				{/*													);*/}
 
-																const index =
-																	votedUserIdsByTeam.findIndex(
-																		(
-																			id: string
-																		) =>
-																			id ===
-																			user.id
-																	) + 1;
+				{/*												const index =*/}
+				{/*													votedUserIdsByTeam.findIndex(*/}
+				{/*														(*/}
+				{/*															id: string*/}
+				{/*														) =>*/}
+				{/*															id ===*/}
+				{/*															user.id*/}
+				{/*													) + 1;*/}
 
-																return (
-																	<li className="team-list-items-photos">
-																		{index ===
-																		0 ? (
-																			<div className="team-addition">
-																				0
-																			</div>
-																		) : (
-																			<div className="team-addition">
-																				+
-																				{2 **
-																					index}
-																			</div>
-																		)}
+				{/*												return (*/}
+				{/*													<li className="team-list-items-photos">*/}
+				{/*														{index ===*/}
+				{/*														0 ? (*/}
+				{/*															<div className="team-addition">*/}
+				{/*																0*/}
+				{/*															</div>*/}
+				{/*														) : (*/}
+				{/*															<div className="team-addition">*/}
+				{/*																+*/}
+				{/*																{2 ***/}
+				{/*																	index}*/}
+				{/*															</div>*/}
+				{/*														)}*/}
 
-																		<img
-																			src={
-																				user.photoURL
-																			}
-																			width="85"
-																			height="85"
-																		/>
-																	</li>
-																);
-															})}
-													</ul>
-												</section>
-												<div className="skew-item team-points-container">
-													<span className="team-title-text">
-														streak
-													</span>
-													<div>
-														{team.points.streak}
-													</div>
-												</div>
-												<div className="skew-item team-points-container">
-													<span className="team-title-text">
-														total
-													</span>
-													<div>
-														{team.points.total}
-													</div>
-												</div>
-											</li>
-										</>
-									);
-								})}
-						</ol>
-					</section>
-				)}
+				{/*														<img*/}
+				{/*															src={*/}
+				{/*																user.photoURL*/}
+				{/*															}*/}
+				{/*															width="85"*/}
+				{/*															height="85"*/}
+				{/*														/>*/}
+				{/*													</li>*/}
+				{/*												);*/}
+				{/*											})}*/}
+				{/*									</ul>*/}
+				{/*								</section>*/}
+				{/*								<div className="skew-item team-points-container">*/}
+				{/*									<span className="team-title-text">*/}
+				{/*										streak*/}
+				{/*									</span>*/}
+				{/*									<div>*/}
+				{/*										{team.points.streak}*/}
+				{/*									</div>*/}
+				{/*								</div>*/}
+				{/*								<div className="skew-item team-points-container">*/}
+				{/*									<span className="team-title-text">*/}
+				{/*										total*/}
+				{/*									</span>*/}
+				{/*									<div>*/}
+				{/*										{team.points.total}*/}
+				{/*									</div>*/}
+				{/*								</div>*/}
+				{/*							</li>*/}
+				{/*						</>*/}
+				{/*					);*/}
+				{/*				})}*/}
+				{/*		</ol>*/}
+				{/*	</section>*/}
+				{/*)}*/}
 			</section>
 		</section>
 	);

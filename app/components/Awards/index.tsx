@@ -136,98 +136,98 @@ export const awards = (users: any, polls: PollData[]) => [
 		requirements: (users: any) =>
 			users.filter((user: any) => user.polls.total > 157),
 	},
-	{
-		name: "HTML Hobbyist",
-		type: "award",
-		description: "Participated in HTML polls the most",
-		requirements: (users: any) =>
-			getUserWithMostPollsAnsweredByCategory(users, polls, "html"),
-	},
-	{
-		name: "Markup Master",
-		type: "award",
-		description: "Have the most correct HTML answers",
-		requirements: (users: any) =>
-			getUserWithMostCorrectPollsByCategory(users, polls, "html"),
-	},
-	{
-		name: "CSS Connoisseur",
-		type: "award",
-		description: "Have the most correct CSS answers",
-		requirements: (users: any) =>
-			getUserWithMostCorrectPollsByCategory(users, polls, "css"),
-	},
-	{
-		name: "Forza Frontend",
-		type: "award",
-		description: "Have the most correct General Frontend answers",
-		requirements: (users: any) =>
-			getUserWithMostCorrectPollsByCategory(
-				users,
-				polls,
-				"general-frontend"
-			),
-	},
-	{
-		name: "'every()thing' correct",
-		type: "award",
-		description: "Have the most correct JS answers",
-		requirements: (users: any) =>
-			getUserWithMostCorrectPollsByCategory(users, polls, "javascript"),
-	},
-	{
-		name: "Type Specialist",
-		type: "award",
-		description: "Have the most correct TS answers",
-		requirements: (users: any) =>
-			getUserWithMostCorrectPollsByCategory(users, polls, "typescript"),
-	},
-	{
-		name: "React Rocket",
-		type: "award",
-		description: "Have the most correct React answers",
-		requirements: (users: any) =>
-			getUserWithMostCorrectPollsByCategory(users, polls, "react"),
-	},
-	{
-		name: "CSS Carrier",
-		type: "award",
-		description: "Participated in CSS polls the most",
-		requirements: (users: any) =>
-			getUserWithMostPollsAnsweredByCategory(users, polls, "css"),
-	},
-	{
-		name: "React 4 U",
-		type: "award",
-		description: "Participated in React polls the most",
-		requirements: (users: any) =>
-			getUserWithMostPollsAnsweredByCategory(users, polls, "react"),
-	},
-	{
-		name: "TypeScript Tinkerer",
-		type: "award",
-		description: "Participated in TypeScript polls the most",
-		requirements: (users: any) =>
-			getUserWithMostPollsAnsweredByCategory(users, polls, "typescript"),
-	},
-	{
-		name: "Const(ant) voter",
-		type: "award",
-		description: "Participated in JavaScript polls the most",
-		requirements: (users: any) =>
-			getUserWithMostPollsAnsweredByCategory(users, polls, "javascript"),
-	},
-	{
-		name: "Frontend Fury",
-		type: "award",
-		description: "Participated in General Frontend polls the most",
-		requirements: (users: any) =>
-			getUserWithMostPollsAnsweredByCategory(
-				users,
-				polls,
-				"general-frontend"
-			),
-	},
+	// {
+	// 	name: "HTML Hobbyist",
+	// 	type: "award",
+	// 	description: "Participated in HTML polls the most",
+	// 	requirements: (users: any) =>
+	// 		getUserWithMostPollsAnsweredByCategory(users, polls, "html"),
+	// },
+	// {
+	// 	name: "Markup Master",
+	// 	type: "award",
+	// 	description: "Have the most correct HTML answers",
+	// 	requirements: (users: any) =>
+	// 		getUserWithMostCorrectPollsByCategory(users, polls, "html"),
+	// },
+	// {
+	// 	name: "CSS Connoisseur",
+	// 	type: "award",
+	// 	description: "Have the most correct CSS answers",
+	// 	requirements: (users: any) =>
+	// 		getUserWithMostCorrectPollsByCategory(users, polls, "css"),
+	// },
+	// {
+	// 	name: "Forza Frontend",
+	// 	type: "award",
+	// 	description: "Have the most correct General Frontend answers",
+	// 	requirements: (users: any) =>
+	// 		getUserWithMostCorrectPollsByCategory(
+	// 			users,
+	// 			polls,
+	// 			"general-frontend"
+	// 		),
+	// },
+	// {
+	// 	name: "'every()thing' correct",
+	// 	type: "award",
+	// 	description: "Have the most correct JS answers",
+	// 	requirements: (users: any) =>
+	// 		getUserWithMostCorrectPollsByCategory(users, polls, "javascript"),
+	// },
+	// {
+	// 	name: "Type Specialist",
+	// 	type: "award",
+	// 	description: "Have the most correct TS answers",
+	// 	requirements: (users: any) =>
+	// 		getUserWithMostCorrectPollsByCategory(users, polls, "typescript"),
+	// },
+	// {
+	// 	name: "React Rocket",
+	// 	type: "award",
+	// 	description: "Have the most correct React answers",
+	// 	requirements: (users: any) =>
+	// 		getUserWithMostCorrectPollsByCategory(users, polls, "react"),
+	// },
+	// {
+	// 	name: "CSS Carrier",
+	// 	type: "award",
+	// 	description: "Participated in CSS polls the most",
+	// 	requirements: (users: any) =>
+	// 		getUserWithMostPollsAnsweredByCategory(users, polls, "css"),
+	// },
+	// {
+	// 	name: "React 4 U",
+	// 	type: "award",
+	// 	description: "Participated in React polls the most",
+	// 	requirements: (users: any) =>
+	// 		getUserWithMostPollsAnsweredByCategory(users, polls, "react"),
+	// },
+	// {
+	// 	name: "TypeScript Tinkerer",
+	// 	type: "award",
+	// 	description: "Participated in TypeScript polls the most",
+	// 	requirements: (users: any) =>
+	// 		getUserWithMostPollsAnsweredByCategory(users, polls, "typescript"),
+	// },
+	// {
+	// 	name: "Const(ant) voter",
+	// 	type: "award",
+	// 	description: "Participated in JavaScript polls the most",
+	// 	requirements: (users: any) =>
+	// 		getUserWithMostPollsAnsweredByCategory(users, polls, "javascript"),
+	// },
+	// {
+	// 	name: "Frontend Fury",
+	// 	type: "award",
+	// 	description: "Participated in General Frontend polls the most",
+	// 	requirements: (users: any) =>
+	// 		getUserWithMostPollsAnsweredByCategory(
+	// 			users,
+	// 			polls,
+	// 			"general-frontend"
+	// 		),
+	// },
 	{
 		name: "Speed Demon",
 		type: "award",

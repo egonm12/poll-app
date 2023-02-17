@@ -15,13 +15,11 @@ import { db } from "~/utils/firebase";
 
 export type InputTypes = "radio" | "checkbox";
 export type PollCategory =
-	| "html"
-	| "css"
-	| "javascript"
-	| "typescript"
-	| "general-frontend"
-	| "react"
-	| "miscellaneous";
+	| "flutter"
+	| "ios"
+	| "android"
+	| "dart"
+	| "general-mobile"
 export type PollStatus = "open" | "closed" | "new" | "needs-revision";
 export type Answer = {
 	id: string;

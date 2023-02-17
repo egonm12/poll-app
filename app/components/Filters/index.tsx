@@ -12,12 +12,11 @@ type AmountOfPollsDisplayProps = {
 };
 
 const categories: PollCategory[] = [
-	"html",
-	"css",
-	"general-frontend",
-	"javascript",
-	"react",
-	"typescript",
+	"flutter",
+	"ios",
+	"android",
+	"dart",
+	"general-mobile",
 ];
 
 const statusses: PollStatus[] = ["new", "needs-revision", "open"];
