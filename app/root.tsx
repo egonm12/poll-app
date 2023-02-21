@@ -19,7 +19,7 @@ export function links() {
 
 export const meta: MetaFunction = () => ({
 	charset: "utf-8",
-	title: "Frontend poll app",
+	title: "Mobile poll app",
 	viewport: "width=device-width,initial-scale=1",
 });
 
