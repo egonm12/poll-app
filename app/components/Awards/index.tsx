@@ -311,6 +311,14 @@ export const awards = (users: any, polls: PollData[]) => [
 		},
 	},
 	{
+		name: "Dart God",
+		type: "award",
+		description: "Have the most correct Dart answers",
+		requirements: (users: any) => {
+			return getUserWithMostCorrectPollsByCategory(users, polls, "dart");
+		},
+	},
+	{
 		name: "King of the rock",
 		type: "award",
 		description: "Have the highest total polls of the season",
