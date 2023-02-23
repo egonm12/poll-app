@@ -353,7 +353,7 @@ export const awards = (users: any, polls: PollData[]) => [
 	{
 		name: "Android Automaton",
 		type: "award",
-		description: "Participated in Flutter polls the most",
+		description: "Participated in Android polls the most",
 		requirements: (users: any) => {
 			return getUserWithMostPollsAnsweredByCategory(users, polls, "android");
 		},
