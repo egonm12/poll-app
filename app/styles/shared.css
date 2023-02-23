@@ -74,7 +74,7 @@
 	--incorrect-20: #dc143c20;
 }
 
-.javascript,
+.dart,
 .saffron {
 	--theme-color: var(--saffron);
 	--theme-color-gradient: var(--saffron-gradient);
@@ -91,7 +91,7 @@
 	--theme-color-tint: var(--lavender-tint);
 }
 
-.css,
+.android,
 .cerulean {
 	--theme-color: var(--cerulean);
 	--theme-color-gradient: var(--cerulean-gradient);
@@ -99,7 +99,7 @@
 	--theme-color-tint: var(--cerulean-tint);
 }
 
-.react,
+.ios,
 .celadon {
 	--theme-color: var(--celadon);
 	--theme-color-gradient: var(--celadon-gradient);
@@ -107,7 +107,7 @@
 	--theme-color-tint: var(--saffron-tint);
 }
 
-.html,
+.general-mobile,
 .vermillion {
 	--theme-color: var(--vermillion);
 	--theme-color-gradient: var(--vermillion-gradient);
