@@ -359,6 +359,22 @@ export const awards = (users: any, polls: PollData[]) => [
 		},
 	},
 	{
+		name: "iOS Virtuoso",
+		type: "award",
+		description: "Have the most correct iOS answers",
+		requirements: (users: any) => {
+			return getUserWithMostCorrectPollsByCategory(users, polls, "ios");
+		},
+	},
+	{
+		name: "Swift Apple",
+		type: "award",
+		description: "Participated in iOS polls the most",
+		requirements: (users: any) => {
+			return getUserWithMostPollsAnsweredByCategory(users, polls, "ios");
+		},
+	},
+	{
 		name: "King of the rock",
 		type: "award",
 		description: "Have the highest total polls of the season",
