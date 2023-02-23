@@ -343,6 +343,22 @@ export const awards = (users: any, polls: PollData[]) => [
 		},
 	},
 	{
+		name: "Adroitly Humanoid",
+		type: "award",
+		description: "Have the most correct Android answers",
+		requirements: (users: any) => {
+			return getUserWithMostCorrectPollsByCategory(users, polls, "android");
+		},
+	},
+	{
+		name: "Android Automaton",
+		type: "award",
+		description: "Participated in Flutter polls the most",
+		requirements: (users: any) => {
+			return getUserWithMostPollsAnsweredByCategory(users, polls, "android");
+		},
+	},
+	{
 		name: "King of the rock",
 		type: "award",
 		description: "Have the highest total polls of the season",
