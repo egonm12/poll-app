@@ -1,8 +1,5 @@
-import {
-	BannerBlock,
-	links as bannerBlockLinks,
-} from "../../components/BannerBlock";
-import { Options, links as optionsLinks } from "../../components/Options";
+import { BannerBlock, links as bannerBlockLinks } from "../../ui/BannerBlock";
+import { Options, links as optionsLinks } from "../../ui/Options";
 import { Option, links as optionLinks } from "../../ui/Option";
 import { Banner, links as bannerLinks } from "../../ui/Banner";
 import { Title, links as titleLinks } from "../../ui/Title";
@@ -41,6 +38,7 @@ export const YourVotes = ({ votes, getCorrectAnswers }: YourVotesProps) => {
 					<Options>
 						{votes.map((vote: any) => (
 							<Option
+								key={vote.id}
 								answer={vote}
 								variant={
 									getCorrectAnswers(vote?.id || "")

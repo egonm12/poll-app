@@ -9,39 +9,35 @@ import {
 	getAmountOfClosedPolls,
 	getAllPolls,
 } from "~/utils/polls";
-import type { FirebaseUserFields } from "~/providers/AuthProvider";
 import { useAuth } from "~/providers/AuthProvider";
-import {
-	PollStatusInfo,
-	links as pollStatusLinks,
-} from "~/components/PollStatusInfo";
+import { links as pollStatusLinks } from "~/components/PollStatusInfo";
 import { getUserByID, getUsers, updateUserById } from "~/utils/user";
 import type { DeepPartial } from "~/utils/types";
 import styles from "~/styles/poll.css";
 import classNames from "classnames";
-import {
-	Awards,
-	links as awardsBoardLinks,
-	Ranks,
-	UpcomingAwards,
-} from "~/components/Awards";
+import { links as awardsBoardLinks } from "~/components/Awards";
 import { Question, links as questionLinks } from "~/components/Question";
-import { CodeBlock, links as codeBlockLinks } from "~/components/CodeBlock";
+import { CodeBlock, links as codeBlockLinks } from "~/ui/CodeBlock";
+import { links as buttonLinks } from "~/ui/Button";
 import { getAllSeasons } from "~/utils/seasons";
 import type { SeasonAwardData } from "~/utils/seasons";
 import { SentByUserText } from "~/components/SentByUserText";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
-import UserStatistics from "~/components/UserStatistics";
+import UsersPollRankingContainer from "~/components/UsersPollRankingContainer";
 import { colors } from "~/utils/colors";
 import { ResultsScreen } from "~/components/ResultsScreen";
 import { links as pollScreenLinks, PollScreen } from "~/components/PollScreen";
-import { getTeams, Team, UpdateTeam, updateTeamById } from "~/utils/teams";
 import { yourVoteStyles } from "../../../compositions/YourVotes";
 import { resultsListStyles } from "../../../compositions/ResultsList";
 import { Title } from "../../../ui/Title";
+import { AwardsContainer } from "~/components/Awards/Container";
+import { Footer, links as footerLinks } from "~/components/Footer";
+import { Sidebar } from "~/components/Sidebar";
+import { links as profileCardLinks } from "../../../ui/ProfileCard";
+import { FirebaseUserFields } from "~/logic/auth";
 
-type ScreenState = "poll" | "results";
+export type ScreenState = "poll" | "results";
 
 export type UpdateScore = Omit<DeepPartial<FirebaseUserFields>, "role">;
 
@@ -49,6 +45,9 @@ export function links() {
 	return [
 		...yourVoteStyles(),
 		...resultsListStyles(),
+		...buttonLinks(),
+		...footerLinks(),
+		...profileCardLinks(),
 
 		...codeBlockLinks(),
 		...awardsBoardLinks(),
@@ -133,36 +132,6 @@ export const action: ActionFunction = async ({ request, params }) => {
 		lastPollSubmit: Date.now(),
 	});
 
-	const teams = await getTeams();
-
-	const team = teams.find((team) =>
-		team.users.find((tuid: string) => tuid === uid)
-	);
-
-	if (team) {
-		const amountOfUsersVotedByTeam =
-			team?.users.filter((tuid: string) =>
-				polls.voted.find((vote: Voted) => {
-					return vote.userId === tuid;
-				})
-			).length + 1;
-
-		const pointsPerAmountOfTeamVotes = 2 ** amountOfUsersVotedByTeam;
-
-		// find user by team id
-		// update points: get prev. team points + sum of length of teams
-		await updateTeamById<UpdateTeam>({
-			id: team?.id || "",
-			points: {
-				streak:
-					amountOfUsersVotedByTeam === team.users.length
-						? team.points.streak + 1
-						: team.points.streak,
-				total: team.points.total + pointsPerAmountOfTeamVotes,
-			},
-		});
-	}
-
 	const getUserIdsByVote = parsedVoted.map((votes) => votes.userId).flat();
 	const hasVoted = getUserIdsByVote.includes(uid);
 
@@ -178,14 +147,12 @@ export type LoaderData = {
 	users: any; // !TODO: type this
 	openedPollNumber: number;
 	seasons: SeasonAwardData[];
-	teams: Team[];
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
 	const data = await getPollById(params.id || "");
 	const polls = await getAllPolls();
 	const users = await getUsers();
-	const teams = await getTeams();
 	const amountOfClosedPolls = await getAmountOfClosedPolls();
 	const seasons = await getAllSeasons();
 	const openedPollNumber = amountOfClosedPolls + 1; // ! Closed polls + current open poll
@@ -203,7 +170,6 @@ export const loader: LoaderFunction = async ({ params }) => {
 		openedPollNumber,
 		polls,
 		seasons,
-		teams,
 	};
 };
 
@@ -229,7 +195,7 @@ export const transformToCodeTags = (value: string, idx?: number) => {
 };
 
 export default function PollDetail() {
-	const { poll, users, openedPollNumber, polls, seasons, teams } =
+	const { poll, users, openedPollNumber, polls, seasons } =
 		useLoaderData() as LoaderData;
 	const { user, isAdmin } = useAuth();
 
@@ -268,101 +234,77 @@ export default function PollDetail() {
 				.filter((vote) => vote.answerId === answerId)
 				.map((vote) => vote.userId)
 				// ! improve
-				.map((id) => users.find((user) => user.id === id))
+				.map((id) => users.find((user: any) => user.id === id))
 		);
 	};
 
 	return (
 		<section
-			className={classNames("page-container", {
+			className={classNames({
 				[poll.category]: true,
 			})}
 		>
-			{openedPollNumber === 100 && typeof window !== "undefined" && (
-				<Confetti width={width} height={height} colors={colors} />
-			)}
-			<aside className="sidebar-info">
-				<PollStatusInfo
-					status={poll.status}
+			<div className="page-container">
+				{openedPollNumber === 100 && typeof window !== "undefined" && (
+					<Confetti width={width} height={height} colors={colors} />
+				)}
+				<Sidebar
+					isAdmin={isAdmin}
 					openedPollNumber={openedPollNumber}
-					pollNumber={poll.pollNumber || 0}
-				/>
-				{isAdmin && (
-					<section className="eekum-bokum-oomenacka">
-						<span>Eekum Bokum Oomenacka!</span>
-						<input
-							type="checkbox"
-							id="votedBy"
-							onChange={() => setShowVotedBy(!showVotedBy)}
-							name="votedBy"
-						/>
-						<input
-							type="checkbox"
-							id="screen"
-							onChange={() => setScreenState("results")}
-							name="screen"
-						/>
-					</section>
-				)}
-				<section className="ranks">
-					<h2 className="title">Ranks</h2>
-					<Ranks users={users} polls={polls} />
-				</section>
-			</aside>
-			<section className="main-content">
-				{isAdmin && <Link to="/polls">Back to list of polls</Link>}
-
-				<Question title={poll.question} />
-				{poll.sentInByUser && (
-					<SentByUserText name={poll.sentInByUser?.displayName} />
-				)}
-				{poll.codeSandboxExample && (
-					<iframe
-						width="100%"
-						height="500"
-						src={poll.codeSandboxExample}
-					/>
-				)}
-				{poll.codeBlock && (
-					<>
-						<Title size="md" variant="primary" tag="span">
-							Code example
-						</Title>
-						<CodeBlock code={poll.codeBlock} />
-					</>
-				)}
-				{screenState === "poll" && (
-					<PollScreen
-						getCorrectAnswers={getCorrectAnswers}
-						showVotedBy={showVotedBy}
-						getVotesFromAllUsers={getVotesFromAllUsers}
-						currentAnswers={currentAnswers}
-					/>
-				)}
-				{screenState === "results" && (
-					<ResultsScreen
-						getCorrectAnswers={getCorrectAnswers}
-						currentAnswers={currentAnswers}
-						getVotesFromAllUsers={getVotesFromAllUsers}
-					/>
-				)}
-
-				<UserStatistics
+					poll={poll}
+					polls={polls}
+					setScreenState={setScreenState}
+					setShowVotedBy={setShowVotedBy}
 					users={users}
-					voted={poll.voted}
-					teams={teams}
+					showVotedBy={showVotedBy}
 				/>
+				<section className="main-content">
+					{isAdmin && <Link to="/polls">Back to list of polls</Link>}
 
-				<section className="awards-container">
-					<h2 className="title">Awards</h2>
-					<Awards users={users} polls={polls} seasons={seasons} />
-				</section>
+					<Question title={poll.question} />
+					{poll.sentInByUser && (
+						<SentByUserText name={poll.sentInByUser?.displayName} />
+					)}
+					{poll.codeSandboxExample && (
+						<iframe
+							width="100%"
+							height="500"
+							src={poll.codeSandboxExample}
+						/>
+					)}
+					{poll.codeBlock && (
+						<>
+							<Title size="md" variant="primary" tag="span">
+								Code example
+							</Title>
+							<CodeBlock code={poll.codeBlock} />
+						</>
+					)}
+					{screenState === "poll" && (
+						<PollScreen
+							getCorrectAnswers={getCorrectAnswers}
+							showVotedBy={showVotedBy}
+							getVotesFromAllUsers={getVotesFromAllUsers}
+							currentAnswers={currentAnswers}
+						/>
+					)}
+					{screenState === "results" && (
+						<ResultsScreen
+							getCorrectAnswers={getCorrectAnswers}
+							currentAnswers={currentAnswers}
+							getVotesFromAllUsers={getVotesFromAllUsers}
+						/>
+					)}
 
-				<section className="awards-container">
-					<h2 className="title">Upcoming Awards</h2>
-					<UpcomingAwards users={users} polls={polls} />
+					<UsersPollRankingContainer users={users} />
+					<AwardsContainer
+						users={users}
+						polls={polls}
+						seasons={seasons}
+					/>
 				</section>
-			</section>
+			</div>
+			<Footer />
 		</section>
 	);
 }

@@ -10,16 +10,11 @@ import {
 	orderBy,
 	where,
 } from "firebase/firestore";
-import { BlockType } from "~/components/PollForm";
+import { BlockType } from "~/admin/components/PollForm";
 import { db } from "~/utils/firebase";
+import { PollCategory } from "./categories";
 
 export type InputTypes = "radio" | "checkbox";
-export type PollCategory =
-	| "flutter"
-	| "ios"
-	| "android"
-	| "dart"
-	| "general-mobile"
 export type PollStatus = "open" | "closed" | "new" | "needs-revision";
 export type Answer = {
 	id: string;

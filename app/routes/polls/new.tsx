@@ -1,18 +1,20 @@
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { v4 as uuidv4 } from "uuid";
-import FormPoll, { Errors } from "../../components/PollForm";
+import FormPoll, { Errors } from "~/admin/components/PollForm";
 import {
 	createPoll,
 	getAmountOfPolls,
-	PollCategory,
 	PollData,
 	PollStatus,
 } from "~/utils/polls";
+import { PollCategory } from "~/utils/categories";
+import { Title } from "~/ui/Title";
+import { links as commonStyleLinks } from "../polls/commonStyleLinks";
 import styles from "~/styles/new-poll.css";
 
 export function links() {
-	return [{ rel: "stylesheet", href: styles }];
+	return [...commonStyleLinks(), { rel: "stylesheet", href: styles }];
 }
 
 export const action: ActionFunction = async ({ request }) => {
@@ -88,10 +90,12 @@ export default function NewPoll() {
 	const { totalPolls } = useLoaderData();
 
 	return (
-		<section style={{ color: "white" }}>
+		<section className="container">
 			<Link to="/polls">Back to list of polls</Link>
 
-			<h1>Poll #{totalPolls + 1}</h1>
+			<Title size="xl" variant="primary">
+				Add a new poll: #{totalPolls + 1}
+			</Title>
 			<FormPoll />
 		</section>
 	);

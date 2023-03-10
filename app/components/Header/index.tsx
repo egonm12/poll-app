@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { loginOrCreate } from "~/logic/auth";
 import { useAuth } from "~/providers/AuthProvider";
 import styles from "./styles.css";
 
@@ -7,7 +8,19 @@ export function links() {
 }
 
 export const Header = () => {
-	const { user, googleLogin, error } = useAuth();
+	const { user, setUser } = useAuth();
+	const [isLoggingIn, setIsLoggingIn] = useState(false);
+	const login = () => {
+		setIsLoggingIn(true);
+
+		loginOrCreate()
+			.then((user) => {
+				setUser(user);
+			})
+			.finally(() => {
+				setIsLoggingIn(false);
+			});
+	};
 
 	return (
 		<header className="header">
@@ -43,16 +56,14 @@ export const Header = () => {
 								</span>
 							</span>
 							{/* <span>Max streak {user.firebase.polls.maxStreak}</span> */}
-							<Link to={"/polls/new"} className="suggest-poll">
-								Suggest poll
-							</Link>
 						</section>
 					</section>
 				</>
 			) : (
-				<button onClick={googleLogin}>Login</button>
+				<button onClick={login} disabled={isLoggingIn}>
+					Login
+				</button>
 			)}
-			{error && <h1>something went wrong...</h1>}
 		</header>
 	);
 };

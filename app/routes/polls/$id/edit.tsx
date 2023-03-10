@@ -1,20 +1,17 @@
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import PollForm, { Errors } from "~/components/PollForm";
-import {
-	getPollById,
-	PollCategory,
-	PollData,
-	updatePollById,
-} from "~/utils/polls";
+import PollForm, { Errors } from "~/admin/components/PollForm";
+import { getPollById, PollData, updatePollById } from "~/utils/polls";
 import styles from "~/styles/new-poll.css";
 import { getAdminUser } from "~/utils/user";
 import { useAuth } from "~/providers/AuthProvider";
+import { PollCategory } from "~/utils/categories";
+import { Title } from "~/ui/Title";
+import { links as commonStyleLinks } from "../../polls/commonStyleLinks";
 
 export function links() {
-	return [{ rel: "stylesheet", href: styles }];
+	return [...commonStyleLinks(), { rel: "stylesheet", href: styles }];
 }
-
 export const action: ActionFunction = async ({ request, params }) => {
 	let formData = await request.formData();
 	let errors: Partial<Errors> = {};
@@ -86,12 +83,13 @@ export default function EditPoll() {
 	if (!isAdmin) {
 		return <h1>404 Not Found</h1>;
 	}
-	// console.log("edit", poll);
-	return (
-		<section style={{ color: "white" }}>
-			<Link to="/polls">Back to list of polls</Link>
 
-			<h1>Edit poll #{poll.pollNumber}</h1>
+	return (
+		<section className="container">
+			<Link to="/polls">Back to list of polls</Link>
+			<Title size="xl" variant="primary">
+				Edit poll #{poll.pollNumber}
+			</Title>
 			<PollForm poll={poll} />
 		</section>
 	);

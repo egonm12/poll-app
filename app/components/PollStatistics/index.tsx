@@ -1,30 +1,33 @@
 import { FC } from "react";
 import { PollData } from "~/utils/polls";
+import { getTotalPollsByCategory } from "./Container";
+import styles from "./styles.css";
+import { Text } from "~/ui/Text";
+import { Title } from "~/ui/Title";
 
 type Props = { polls: PollData[] };
 
-export const getTotalPollsByCategory = (polls: PollData[]) =>
-	polls
-		.filter((poll) => poll.category !== "miscellaneous")
-		.reduce((allPolls: Record<string, number>, poll: PollData) => {
-			const currCount = allPolls[poll.category] ?? 0;
+export function links() {
+	return [{ rel: "stylesheet", href: styles }];
+}
 
-			return {
-				...allPolls,
-				[poll.category]: currCount + 1,
-			};
-		}, {});
-
-const PollStatistics: FC<Props> = ({ polls }) => (
-	<ul>
-		<h2>Poll statistieken:</h2>
-		<h3>Totaal aantal polls in de volgende categorieën:</h3>
-		{Object.entries(getTotalPollsByCategory(polls)).map(([key, value]) => (
-			<li key={key}>
-				{key} - {value}
-			</li>
-		))}
-	</ul>
+export const PollStatistics: FC<Props> = ({ polls }) => (
+	<>
+		<Title size="sm" variant="primary" tag="h3">
+			All categories
+		</Title>
+		<ul className="categories-list">
+			{Object.entries(getTotalPollsByCategory(polls)).map(
+				([key, value]) => (
+					<li className={`categories-list-item ${key}`} key={key}>
+						{key} ({value})
+					</li>
+				)
+			)}
+			<hr />
+			<Text size="lg" variant="rainbow" tag="span">
+				{polls.length} total polls
+			</Text>
+		</ul>
+	</>
 );
-
-export default PollStatistics;

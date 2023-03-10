@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { NewPollType } from "../PollForm";
+import type { NewPollType } from "~/admin/components/PollForm";
 
 type Props = {
 	fields: NewPollType[];
