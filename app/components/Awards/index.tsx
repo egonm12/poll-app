@@ -382,6 +382,22 @@ export const awards = (users: any, polls: PollData[]) => [
 		},
 	},
 	{
+		name: "Mobile Maven",
+		type: "award",
+		description: "Have the most correct General Mobile answers",
+		requirements: (users: any) => {
+			return getUserWithMostCorrectPollsByCategory(users, polls, "general-mobile");
+		},
+	},
+	{
+		name: "Mobile Speedster",
+		type: "award",
+		description: "Participated in General Mobile polls the most",
+		requirements: (users: any) => {
+			return getUserWithMostPollsAnsweredByCategory(users, polls, "ios");
+		},
+	},
+	{
 		name: "King of the rock",
 		type: "award",
 		description: "Have the highest total polls of the season",
