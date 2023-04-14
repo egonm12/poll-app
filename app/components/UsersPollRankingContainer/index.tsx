@@ -1,7 +1,5 @@
 import { FC, useState } from "react";
-import { Banner } from "~/ui/Banner";
 import { ProfileCard, ProfileCardContainer } from "~/ui/ProfileCard";
-import { Title } from "~/ui/Title";
 import { Button } from "../../ui/Button";
 
 type Props = {
@@ -11,7 +9,7 @@ type Props = {
 type Statistics = "all-time" | "correct" | "season";
 
 const UsersPollRankingContainer: FC<Props> = ({ users }) => {
-	const [active, setActive] = useState<Statistics>("all-time");
+	const [active, setActive] = useState<Statistics>("correct");
 
 	return (
 		<section className="poll-statistics-container">
@@ -51,20 +49,15 @@ type PollRankingsContainer = {
 	users: any;
 };
 
-const PollRankingsContainer = ({ active, users }: PollRankingsContainer) => (
-	<section className="poll-rankings">
-		{active === "all-time" && <AllTimeTotalPolls users={users} />}
-		{active === "correct" && <CorrectPolls users={users} />}
-		{active === "season" && (
-			<Banner variant="warning" size="wide" icon="🏗️👷🏻‍♂️">
-				<Title variant="primary" size="xl" tag="span">
-					Coming soon!
-				</Title>
-			</Banner>
-		)}
-	</section>
-);
-
+const PollRankingsContainer = ({ active, users }: PollRankingsContainer) => {
+	return (
+		<section className="poll-rankings">
+			{active === "all-time" && <AllTimeTotalPolls users={users} />}
+			{active === "correct" && <CorrectPolls users={users} />}
+			{active === "season" && <h1>Brewing something new... 🧪🧑‍🔬</h1>}
+		</section>
+	);
+};
 const AllTimeTotalPolls = ({ users }: any) => (
 	<>
 		{users

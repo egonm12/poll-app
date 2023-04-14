@@ -11,10 +11,16 @@ import {
 import { PollCategory } from "~/utils/categories";
 import { Title } from "~/ui/Title";
 import { links as commonStyleLinks } from "../polls/commonStyleLinks";
+import { links as commonCRUDPollLinks } from "../polls/commonCRUDPollLinks";
+
 import styles from "~/styles/new-poll.css";
 
 export function links() {
-	return [...commonStyleLinks(), { rel: "stylesheet", href: styles }];
+	return [
+		...commonStyleLinks(),
+		...commonCRUDPollLinks(),
+		{ rel: "stylesheet", href: styles },
+	];
 }
 
 export const action: ActionFunction = async ({ request }) => {

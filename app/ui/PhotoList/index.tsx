@@ -41,7 +41,12 @@ export const PhotoList = ({
 	return (
 		<ul className={styles}>
 			{voters.map((voter) => (
-				<li key={voter.photo.url}>
+				<li
+					{...(voter.photo.alt === "Ronald Aarnoutse" && {
+						style: { position: "relative" },
+					})}
+					key={voter.photo.url}
+				>
 					<Photo
 						photo={{
 							url: voter.photo.url || "",

@@ -2,6 +2,12 @@
 	cursor: not-allowed;
 }
 
+.text-area-field-default {
+	background: var(--primary-black);
+	border: 1px solid var(--tertiary-black);
+	color: var(--white);
+}
+
 .text-area-field-valid {
 	background: var(--correct-20);
 	border: 3px solid var(--correct);

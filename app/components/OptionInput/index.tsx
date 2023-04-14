@@ -3,11 +3,13 @@ import { LoaderData } from "~/routes/polls/$id";
 import { Option, OptionProps } from "~/ui/Option";
 
 export type OptionInputProps = Pick<OptionProps, "answer"> & {
+	idx: number;
 	selectable?: boolean;
 	isChecked?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const OptionInput = ({
+	idx,
 	answer,
 	isChecked,
 	selectable,
@@ -15,7 +17,7 @@ export const OptionInput = ({
 	const { poll } = useLoaderData() as LoaderData;
 
 	return (
-		<>
+		<div>
 			{selectable && (
 				<input
 					className="input"
@@ -31,6 +33,6 @@ export const OptionInput = ({
 				answer={answer}
 				variant={poll.status !== "open" ? "disabled" : "default"}
 			/>
-		</>
+		</div>
 	);
 };

@@ -6,11 +6,16 @@ import {
 	SeasonAwardData,
 	SeasonData,
 } from "~/utils/seasons";
-import { PollCategory, PollData } from "~/utils/polls";
+import { PollData } from "~/utils/polls";
 import styles from "./styles.css";
 import { Award, links as awardLinks } from "~/ui/Award";
 import { links as textLinks } from "../../ui/Text";
 import { Title } from "~/ui/Title";
+import { Text } from "~/ui/Text";
+import { useLoaderData } from "@remix-run/react";
+import { LoaderData } from "~/routes/polls/$id";
+import { EggConditional } from "~/seasonal/Egg/EggContainer";
+import { PollCategory } from "~/utils/categories";
 
 export const links = () => [
 	...textLinks(),
@@ -235,6 +240,20 @@ export const awards = (users: any, polls: PollData[]) => [
 	// 			"general-frontend"
 	// 		),
 	// },
+	{
+		name: "Git Contributor",
+		type: "award",
+		description: "Participated in Git polls the most",
+		requirements: (users: any) =>
+			getUserWithMostPollsAnsweredByCategory(users, polls, "git"),
+	},
+	{
+		name: "Git GOAT",
+		type: "award",
+		description: "Have the most correct Git answers",
+		requirements: (users: any) =>
+			getUserWithMostCorrectPollsByCategory(users, polls, "git"),
+	},
 	{
 		name: "Speed Demon",
 		type: "award",

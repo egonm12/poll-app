@@ -35,7 +35,8 @@ import { AwardsContainer } from "~/components/Awards/Container";
 import { Footer, links as footerLinks } from "~/components/Footer";
 import { Sidebar } from "~/components/Sidebar";
 import { links as profileCardLinks } from "../../../ui/ProfileCard";
-import { FirebaseUserFields } from "~/logic/auth";
+import type { FirebaseUserFields } from "~/providers/AuthProvider";
+import { links as popupStyles } from "../../../ui/Popup";
 
 export type ScreenState = "poll" | "results";
 
@@ -48,6 +49,7 @@ export function links() {
 		...buttonLinks(),
 		...footerLinks(),
 		...profileCardLinks(),
+		...popupStyles(),
 
 		...codeBlockLinks(),
 		...awardsBoardLinks(),
@@ -66,16 +68,32 @@ const findCurrentStreakLength = (streak: boolean[]) => {
 	return streak.length;
 };
 
+export const PENALTY_SCORE = -1;
+
+const getCorrectPointsForVotedAnswers = (
+	parsedVoted: Voted[],
+	poll: PollData
+) =>
+	parsedVoted.reduce((acc, voted) => {
+		const answer = poll.answers.find(
+			(answer) => answer.id === voted.answerId
+		);
+		return acc + (answer?.points || PENALTY_SCORE);
+	}, 0);
+
 export const action: ActionFunction = async ({ request, params }) => {
 	const formData = await request.formData();
 	const selectedVotes = formData.get("selectedVotes") as string;
 	const uid = formData.get("uid") as string;
 	const paramId = params.id || "";
 	const parsedVoted = JSON.parse(selectedVotes) as Voted[];
+	const openedPollNumber = JSON.parse(
+		formData.get("openedPollNumber") as string
+	);
 
-	const polls = (await getPollById(paramId)) as PollData;
+	const poll = (await getPollById(paramId)) as PollData;
 
-	const hasAlreadyVoted = polls.voted.find((voted) => voted.userId === uid);
+	const hasAlreadyVoted = poll.voted.find((voted) => voted.userId === uid);
 
 	if (hasAlreadyVoted) {
 		return {
@@ -84,18 +102,11 @@ export const action: ActionFunction = async ({ request, params }) => {
 		};
 	}
 
-	// const getAmountOfCorrectAnswers = polls.correctAnswers.filter((answer) =>
-	// 	parsedVoted.find((voted) => answer.id === voted.answerId)
-	// ).length;
-
-	const isEveryAnswerCorrect = parsedVoted
-		.map((voted) =>
-			polls.correctAnswers.find((answer) => answer.id === voted.answerId)
-		)
-		.every((answer) => answer);
+	const points = getCorrectPointsForVotedAnswers(parsedVoted, poll);
+	const totalCorrectPoints = points < 0 ? 0 : points;
 
 	await updatePollById(paramId, {
-		voted: [...polls.voted, ...parsedVoted],
+		voted: [...poll.voted, ...parsedVoted],
 	});
 
 	const currentUser = await getUserByID(uid);
@@ -121,13 +132,14 @@ export const action: ActionFunction = async ({ request, params }) => {
 		polls: {
 			answeredById: [...currentUser?.polls.answeredById, paramId],
 			total: currentUser?.polls.total + 1,
-			seasonStreak:
-				1 + (currentUser?.polls.seasonStreak + polls.voted.length),
-
+			seasonStreak: 0,
 			currentStreak: findCurrentStreakLength(getVotedPollsByUser),
-			correct: isEveryAnswerCorrect
-				? currentUser?.polls.correct + 1
-				: currentUser?.polls.correct,
+			correct: currentUser?.polls.correct + totalCorrectPoints,
+			oldCorrect: currentUser?.polls.correct,
+			specials: {
+				...currentUser?.polls.specials,
+				poll200: openedPollNumber === 200,
+			},
 		},
 		lastPollSubmit: Date.now(),
 	});
@@ -155,7 +167,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 	const users = await getUsers();
 	const amountOfClosedPolls = await getAmountOfClosedPolls();
 	const seasons = await getAllSeasons();
-	const openedPollNumber = amountOfClosedPolls + 1; // ! Closed polls + current open poll
+	const openedPollNumber = amountOfClosedPolls + 2; // ! Closed polls + current open poll + missing poll in this app (important Roel!)
 
 	const getUserIdsByVote = data?.voted
 		.map((votes: Voted) => votes.userId)
@@ -245,9 +257,14 @@ export default function PollDetail() {
 			})}
 		>
 			<div className="page-container">
-				{openedPollNumber === 100 && typeof window !== "undefined" && (
-					<Confetti width={width} height={height} colors={colors} />
-				)}
+				{(openedPollNumber === 100 || openedPollNumber === 200) &&
+					typeof window !== "undefined" && (
+						<Confetti
+							width={width}
+							height={height}
+							colors={colors}
+						/>
+					)}
 				<Sidebar
 					isAdmin={isAdmin}
 					openedPollNumber={openedPollNumber}
@@ -286,6 +303,7 @@ export default function PollDetail() {
 							showVotedBy={showVotedBy}
 							getVotesFromAllUsers={getVotesFromAllUsers}
 							currentAnswers={currentAnswers}
+							openedPollNumber={openedPollNumber}
 						/>
 					)}
 					{screenState === "results" && (

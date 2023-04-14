@@ -31,6 +31,7 @@ export const OptionVotes = ({
 			<div className="option-voters">
 				<PhotoList variant="chips" voters={votersToShow} />
 			</div>
+
 			{allVoters.length > LIMIT && (
 				<Text variant="primary" size="sm">
 					+ {additionalVoters.length} others voted
