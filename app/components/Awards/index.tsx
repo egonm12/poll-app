@@ -445,6 +445,14 @@ export const awards = (users: any, polls: PollData[]) => [
 		},
 	},
 	{
+		name: "ChatGPT Champion",
+		type: "award",
+		description: "Have the most answers using ChatGPT",
+		requirements: (users: any) => {
+			return users.filter((user: any) => user.id === 'z96mxsQ04jfyVArKKLyRY4u8f4f2');
+		},
+	},
+	{
 		name: "Black Sheep",
 		type: "award",
 		upcoming: true,
